@@ -1,3 +1,4 @@
 python/
 docker/kafka-comandos.sh
 .env
+venv/

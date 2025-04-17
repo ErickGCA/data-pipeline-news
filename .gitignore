@@ -1,6 +1,6 @@
 python/
+docker/
 docker/kafka-comandos.sh
 .env
 venv/
-
-
+news_pipe.py

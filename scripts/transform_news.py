@@ -12,7 +12,8 @@ def alcohol_accident(text):
         r"dirigia.*(bêbado|alcoolizado)",
         r"motorista.*(bêbado|alcoolizado)",
         r"sob efeito de álcool",
-       # r"vale tudo", <- expressão de teste
+        #r"vale tudo",
+        #r"morre",
     ]
     return any(re.search(kw, text) for kw in keywords)
 def transform(input_path, output_path):

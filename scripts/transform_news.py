@@ -13,7 +13,7 @@ def alcohol_accident(text):
         r"motorista.*(bêbado|alcoolizado)",
         r"sob efeito de álcool",
         #r"vale tudo",
-        #r"morre",
+        r"morre",
     ]
     return any(re.search(kw, text) for kw in keywords)
 def transform(input_path, output_path):
@@ -39,6 +39,6 @@ def transform(input_path, output_path):
 
 
 if __name__ == "__main__":
-    input_path = "../pipelines-news/data/raw_news.json"
-    output_path = "../pipelines-news/data/filtered_news.json"
+    input_path = "../data-pipeline-news/data/raw_news.json"
+    output_path = "../data-pipeline-news/data/filtered_news.json"
     transform(input_path, output_path)

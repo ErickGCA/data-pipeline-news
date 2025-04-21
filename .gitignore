@@ -5,3 +5,4 @@ docker/kafka-comandos.sh
 venv/
 news_pipe.py
 justforcommit/
+imports.txt

@@ -40,8 +40,8 @@ if __name__ == "__main__":
 
     noticias = fetch_news(api_key, query)
 
-    os.makedirs("../data-pipeline-news/data", exist_ok=True)
-    with open('../data-pipeline-news/data/raw_news.json', 'w', encoding='utf-8') as f:
+    os.makedirs("../pipelines-news/data", exist_ok=True)
+    with open('../pipelines-news/data/raw_news.json', 'w', encoding='utf-8') as f:
         json.dump(noticias, f, ensure_ascii=False, indent=4)
 
 

@@ -39,6 +39,6 @@ def transform(input_path, output_path):
 
 
 if __name__ == "__main__":
-    input_path = "../data-pipeline-news/data/raw_news.json"
-    output_path = "../data-pipeline-news/data/filtered_news.json"
+    input_path = "../pipelines-news/data/raw_news.json"
+    output_path = "../pipelines-news/data/filtered_news.json"
     transform(input_path, output_path)

@@ -6,3 +6,9 @@ venv/
 news_pipe.py
 justforcommit/
 imports.txt
+lambda_layers/
+etl_lambda.zip
+lambda_layers/
+*.zip
+__pycache__/
+*.pyc

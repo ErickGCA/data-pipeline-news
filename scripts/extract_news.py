@@ -1,21 +1,26 @@
-# Corrigir posteriormente os paths (base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# file_path = os.path.join(base_dir, "data", "raw_news.json")
-# os.makedirs(os.path.dirname(file_path), exist_ok=True))
-
 import requests
 import json
-from dotenv import load_dotenv
 import os
+import datetime
+from dotenv import load_dotenv
+
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_dir = os.path.join(base_dir, "data")
+os.makedirs(data_dir, exist_ok=True)
 
 load_dotenv()
 
-def fetch_news(api_key, query, language='pt', page_size=100, max_pages=5):
+def fetch_news(api_key, query, language='pt', page_size=100, max_pages=5, days_back=30):
+
     all_articles = []
-    
+    from_date = (datetime.datetime.now() - datetime.timedelta(days=days_back)).strftime('%Y-%m-%d')
+    to_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
     for page in range(1, max_pages + 1):
         url = (
             f'https://newsapi.org/v2/everything?q={query}'
-            f'&language={language}&pageSize={page_size}&page={page}&apiKey={api_key}'
+            f'&language={language}&pageSize={page_size}&page={page}'
+            f'&from={from_date}&to={to_date}&sortBy=relevancy&apiKey={api_key}'
         )
         try:
             response = requests.get(url)
@@ -23,10 +28,12 @@ def fetch_news(api_key, query, language='pt', page_size=100, max_pages=5):
                 data = response.json()
                 articles = data.get('articles', [])
                 if not articles:
+                    print(f"Nenhum artigo encontrado na página {page}")
                     break
                 all_articles.extend(articles)
+                print(f"Página {page}: {len(articles)} artigos encontrados")
             else:
-                print(f"Erro na página {page}: {response.status_code}")
+                print(f"Erro na página {page}: {response.status_code}, {response.text}")
                 break
         except Exception as e:
             print(f"Erro ao fazer requisição: {e}")
@@ -35,16 +42,21 @@ def fetch_news(api_key, query, language='pt', page_size=100, max_pages=5):
     return all_articles
 
 if __name__ == "__main__":
+    raw_news_path = os.path.join(data_dir, "raw_news.json")
+    
     api_key = os.getenv("NEWS_API_KEY")
-    query = "acidente de carro com álcool"
-
-    noticias = fetch_news(api_key, query)
-
-    os.makedirs("../pipelines-news/data", exist_ok=True)
-    with open('../pipelines-news/data/raw_news.json', 'w', encoding='utf-8') as f:
-        json.dump(noticias, f, ensure_ascii=False, indent=4)
-
-
-    # print("Salvando em:", os.path.abspath('../pipelines-news/data/raw_news.json'))
-
-    print(f"{len(noticias)} notícias extraídas e salvas em 'raw_news.json'")
+    if not api_key:
+        raise ValueError("Chave de API não encontrada. Configure a variável NEWS_API_KEY no arquivo .env")
+    
+    query = '(acidente OR colisão OR batida OR capotamento OR atropelamento) AND (álcool OR alcoolizado OR embriaguez OR bêbado OR alcoolemia OR "lei seca")'
+    
+    print(f"Iniciando extração de notícias com a consulta: {query}")
+    
+    news = fetch_news(api_key, query)
+    
+    print(f"Total de {len(news)} notícias extraídas")
+    
+    with open(raw_news_path, 'w', encoding='utf-8') as f:
+        json.dump(news, f, ensure_ascii=False, indent=4)
+    
+    print(f"Dados brutos salvos em: {raw_news_path}")

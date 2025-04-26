@@ -38,7 +38,6 @@ def fetch_news(api_key, query, language='pt', page_size=100, max_pages=1, days_b
                 all_articles.extend(articles)
                 print(f"Página {page}: {len(articles)} artigos encontrados")
 
-                # Interrompe a iteração se atingir o limite de resultados
                 if len(all_articles) >= 100:
                     break
 

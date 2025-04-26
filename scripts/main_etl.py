@@ -13,8 +13,8 @@ def main_etl():
     print(f"Iniciando ETL em {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 50)
 
-    raw_path = "/tmp/raw_news.json"
-    filtered_path = "/tmp/filtered_news.json"
+    raw_path = "../data/raw_news.json"
+    filtered_path = "../data/filtered_news.json"
 
     try:
         api_key = os.getenv("NEWS_API_KEY")
@@ -24,7 +24,7 @@ def main_etl():
         query = '(acidente OR colisão OR batida OR capotamento OR atropelamento) AND (álcool OR alcoolizado OR embriaguez OR bêbado OR alcoolemia OR "lei seca")'
         
         print(f"Iniciando extração com a consulta: {query}")
-        noticias = fetch_news(api_key, query, days_back=60)  # Busca nos últimos 60 dias
+        noticias = fetch_news(api_key, query, days_back=30)  
 
         with open(raw_path, 'w', encoding='utf-8') as f:
             json.dump(noticias, f, ensure_ascii=False, indent=4)
@@ -44,7 +44,6 @@ def main_etl():
         print(f"Erro na etapa de Transform: {e}")
         return False
 
-    # Load
     try:
         bucket_name = os.getenv("S3_BUCKET_NAME")
         if not bucket_name:

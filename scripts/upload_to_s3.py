@@ -70,7 +70,7 @@ def upload_to_s3(file_path, bucket_name, object_name=None, content_type=None):
         return False
 
 if __name__ == "__main__":
-    file_path = "../pipelines-news/data/filtered_news.json"
+    file_path = "../data/filtered_news.json"
     bucket_name = os.getenv("S3_BUCKET_NAME")
     object_name = "filtered_news.json"
     

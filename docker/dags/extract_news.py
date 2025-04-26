@@ -4,14 +4,14 @@ import os
 import datetime
 from dotenv import load_dotenv
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-data_dir = os.path.join(base_dir, "data")
+base_dir = os.path.dirname(os.path.abspath(__file__))  # Diretório atual do script
+data_dir = os.path.join(base_dir, "data")  # Pasta 'data' dentro do diretório 'dags'
 os.makedirs(data_dir, exist_ok=True)
 
+raw_news_path = os.path.join(data_dir, "raw_news.json")
 load_dotenv()
 
-def fetch_news(api_key, query, language='pt', page_size=100, max_pages=5, days_back=30):
-
+def fetch_news(api_key, query, output_path=None, language='pt', page_size=100, max_pages=1, days_back=30):
     all_articles = []
     from_date = (datetime.datetime.now() - datetime.timedelta(days=days_back)).strftime('%Y-%m-%d')
     to_date = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -27,11 +27,21 @@ def fetch_news(api_key, query, language='pt', page_size=100, max_pages=5, days_b
             if response.status_code == 200:
                 data = response.json()
                 articles = data.get('articles', [])
+                total_results = data.get('totalResults', 0)
+
+                if total_results > 100:
+                    print(f"AVISO: A consulta retornou {total_results} resultados, mas apenas os primeiros 100 serão extraídos devido à limitação da API.")
+
                 if not articles:
                     print(f"Nenhum artigo encontrado na página {page}")
                     break
+
                 all_articles.extend(articles)
                 print(f"Página {page}: {len(articles)} artigos encontrados")
+
+                if len(all_articles) >= 100:
+                    break
+
             else:
                 print(f"Erro na página {page}: {response.status_code}, {response.text}")
                 break

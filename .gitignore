@@ -2,6 +2,8 @@ python/
 docker/logs/
 docker/plugins/
 docker/kafka-comandos.sh
+docker/.env
+docker/dags/.env
 docker_old
 .env
 venv/

@@ -3,8 +3,11 @@ import re
 import os
 import unicodedata
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+base_dir = os.path.dirname(os.path.abspath(__file__))  
 data_dir = os.path.join(base_dir, "data")
+os.makedirs(data_dir, exist_ok=True)
+
+raw_news_path = os.path.join(data_dir, "raw_news.json")
 
 def normalize_text(text):
     if not text:

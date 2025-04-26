@@ -4,8 +4,8 @@ import os
 import datetime
 from dotenv import load_dotenv
 
-base_dir = os.path.dirname(os.path.abspath(__file__))  # Diretório atual do script
-data_dir = os.path.join(base_dir, "data")  # Pasta 'data' dentro do diretório 'dags'
+base_dir = os.path.dirname(os.path.abspath(__file__)) 
+data_dir = os.path.join(base_dir, "data")  
 os.makedirs(data_dir, exist_ok=True)
 
 raw_news_path = os.path.join(data_dir, "raw_news.json")

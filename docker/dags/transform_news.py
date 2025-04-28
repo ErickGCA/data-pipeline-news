@@ -2,12 +2,23 @@ import json
 import re
 import os
 import unicodedata
+import logging
+from utils.create_directory import create_directory
 
-base_dir = os.path.dirname(os.path.abspath(__file__))  
-data_dir = os.path.join(base_dir, "data")
-os.makedirs(data_dir, exist_ok=True)
 
-raw_news_path = os.path.join(data_dir, "raw_news.json")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+raw_data_dir = os.path.join(base_dir, "data/raw")
+processed_data_dir = os.path.join(base_dir, "data/processed")
+
+create_directory(raw_data_dir)
+create_directory(processed_data_dir)
+
+raw_news_path = os.path.join(raw_data_dir, "raw_news.json")
+processed_news_path = os.path.join(processed_data_dir, "processed_news.json")
 
 def normalize_text(text):
     if not text:
@@ -111,22 +122,23 @@ def transform(input_path, output_path):
 
         filtered_news.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
 
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        create_directory(os.path.dirname(output_path))  
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(filtered_news, f, ensure_ascii=False, indent=4)
 
-        print(f"{len(filtered_news)} notícias relevantes salvas em '{output_path}'")
+        logger.info(f"{len(filtered_news)} notícias relevantes salvas em '{output_path}'")
         
         if filtered_news:
-            print("\nNotícias mais relevantes:")
+            logger.info("\nNotícias mais relevantes:")
             for i, news in enumerate(filtered_news[:5], 1):
-                print(f"{i}. [{news.get('relevance_score')}] {news.get('title')}")
+                logger.info(f"{i}. [{news.get('relevance_score')}] {news.get('title')}")
 
 if __name__ == "__main__":
-    input_path = os.path.join(data_dir, "raw_news.json")
-    output_path = os.path.join(data_dir, "filtered_news.json")
+
+    input_path = os.path.join(raw_data_dir, "raw_news.json")
+    output_path = os.path.join(processed_data_dir, "processed_news.json")
     
     try:
         transform(input_path, output_path)
     except Exception as e:
-        print(f"Erro na transformação dos dados: {e}")
+        logger.error(f"Erro na transformação dos dados: {e}")

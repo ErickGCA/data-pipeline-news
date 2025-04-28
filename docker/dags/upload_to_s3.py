@@ -1,6 +1,7 @@
 import boto3
 import os
 import logging
+from pathlib import Path
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
@@ -24,7 +25,7 @@ def upload_to_s3(file_path, bucket_name, object_name=None, content_type=None):
         logger.error("Credenciais AWS não encontradas nas variáveis de ambiente")
         return False
         
-    region_name = os.getenv("AWS_REGION", "us-east-1")  
+    region_name = os.getenv("AWS_REGION", "us-east-1")
     try:
         s3 = boto3.client(
             's3',
@@ -39,8 +40,7 @@ def upload_to_s3(file_path, bucket_name, object_name=None, content_type=None):
     extra_args = {}
     if content_type:
         extra_args['ContentType'] = content_type
-    
-    if file_path.lower().endswith('.json') and not content_type:
+    elif file_path.lower().endswith('.json'):
         extra_args['ContentType'] = 'application/json'
     
     try:
@@ -70,13 +70,14 @@ def upload_to_s3(file_path, bucket_name, object_name=None, content_type=None):
         return False
 
 if __name__ == "__main__":
-    file_path = "../data/filtered_news.json"
+    base_dir = Path(__file__).resolve().parent
+    file_path = base_dir / "data" / "processed" / "processed_news.json"
     bucket_name = os.getenv("S3_BUCKET_NAME")
-    object_name = "filtered_news.json"
+    object_name = "processed_news.json"
     
     if not bucket_name:
         logger.error("S3_BUCKET_NAME não definido nas variáveis de ambiente")
     else:
-        success = upload_to_s3(file_path, bucket_name, object_name)
+        success = upload_to_s3(str(file_path), bucket_name, object_name)
         if not success:
             logger.error("Upload para S3 falhou")

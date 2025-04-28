@@ -1,4 +1,3 @@
-
 import os
 
 def create_directory(directory_path):

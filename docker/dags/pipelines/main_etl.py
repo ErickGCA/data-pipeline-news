@@ -1,11 +1,13 @@
+#main_etl.py
+
 import json
 import os
 import datetime
 import logging
 from dotenv import load_dotenv
-from extract_news import fetch_news
-from transform_news import transform
-from upload_to_s3 import upload_to_s3
+from pipelines.extract_news import fetch_news
+from pipelines.transform_news import transform
+from pipelines.upload_to_s3 import upload_to_s3
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

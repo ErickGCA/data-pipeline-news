@@ -4,7 +4,7 @@ import datetime
 import logging
 import sys
 from dotenv import load_dotenv
-from pipelines.extract_news import fetch_news
+from pipelines.extract_news import fetch_news_window
 from pipelines.transform_news import transform
 from pipelines.upload_to_s3 import upload_to_s3
 from utils.setup_all_directories import setup_all_directories
@@ -31,11 +31,16 @@ def main_etl():
         api_key = os.getenv("NEWS_API_KEY")
         if not api_key:
             raise ValueError("Chave de API não encontrada. Configure a variável NEWS_API_KEY no arquivo .env")
+        logger.info(f"API Key utilizada: {api_key}")
+
        
         query = '(acidente OR colisão OR batida OR capotamento OR atropelamento) AND (álcool OR alcoolizado OR embriaguez OR bêbado OR alcoolemia OR "lei seca")'
        
         logger.info(f"Iniciando extração com a consulta: {query}")
-        noticias = fetch_news(api_key, query, days_back=30)
+        now = datetime.datetime.now()
+        from_date = (now - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
+        to_date = now.strftime('%Y-%m-%d')
+        noticias = fetch_news_window(api_key, query, from_date, to_date)
         with open(raw_path, 'w', encoding='utf-8') as f:
             json.dump(noticias, f, ensure_ascii=False, indent=4)
         logger.info(f"Extract finalizado com sucesso: {len(noticias)} notícias extraídas")

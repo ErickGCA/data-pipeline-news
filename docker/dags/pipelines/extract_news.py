@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     load_dotenv()
     api_key = os.getenv("NEWS_API_KEY")
+    logger.info("")
     if not api_key:
         raise ValueError("Chave de API não encontrada. Configure a variável NEWS_API_KEY no arquivo .env")
 
@@ -24,7 +25,7 @@ if __name__ == "__main__":
     logger.info(f"Iniciando extração de notícias com a consulta: {query}")
 
     now = datetime.datetime.now()
-    days_back = 30
+    days_back = 2
     delta = datetime.timedelta(days=2)
 
     all_articles = []

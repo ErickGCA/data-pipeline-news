@@ -3,19 +3,15 @@ import re
 import os
 import unicodedata
 import logging
-from utils.create_directory import create_directory
+from utils.setup_all_directories import setup_all_directories
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-raw_data_dir = os.path.join(base_dir, "data/raw")
-processed_data_dir = os.path.join(base_dir, "data/processed")
-
-create_directory(raw_data_dir)
-create_directory(processed_data_dir)
+directories = setup_all_directories()
+raw_data_dir = directories["raw_data_dir"]
+processed_data_dir = directories["processed_data_dir"]
 
 raw_news_path = os.path.join(raw_data_dir, "raw_news.json")
 processed_news_path = os.path.join(processed_data_dir, "processed_news.json")
@@ -122,7 +118,6 @@ def transform(input_path, output_path):
 
         filtered_news.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
 
-        create_directory(os.path.dirname(output_path))  
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(filtered_news, f, ensure_ascii=False, indent=4)
 
@@ -134,7 +129,6 @@ def transform(input_path, output_path):
                 logger.info(f"{i}. [{news.get('relevance_score')}] {news.get('title')}")
 
 if __name__ == "__main__":
-
     input_path = os.path.join(raw_data_dir, "raw_news.json")
     output_path = os.path.join(processed_data_dir, "processed_news.json")
     

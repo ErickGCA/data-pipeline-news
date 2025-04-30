@@ -63,10 +63,8 @@ def main_etl():
         with open(raw_path, "w", encoding="utf-8") as f:
             json.dump(noticias, f, ensure_ascii=False, indent=4)
 
-        os.makedirs("mock_data", exist_ok=True)
-        with open(
-            os.path.join("mock_data", "mock_news_data.json"), "w", encoding="utf-8"
-        ) as f:
+        mock_path = os.path.join(directories["mock_data_dir"], "mock_news_data.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
             json.dump(noticias, f, ensure_ascii=False, indent=4)
 
         logger.info(

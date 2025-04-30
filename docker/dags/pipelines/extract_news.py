@@ -1,13 +1,16 @@
-import os
+import datetime
 import json
 import logging
-import datetime
-from dotenv import load_dotenv
-from utils.setup_all_directories import setup_all_directories
-from utils.news_fetcher import fetch_news_window
-from utils.deduplication import deduplicate_articles
+import os
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from dotenv import load_dotenv
+from utils.deduplication import deduplicate_articles
+from utils.news_fetcher import fetch_news_window
+from utils.setup_all_directories import setup_all_directories
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
@@ -15,7 +18,9 @@ if __name__ == "__main__":
     api_key = os.getenv("NEWS_API_KEY")
     logger.info("")
     if not api_key:
-        raise ValueError("Chave de API não encontrada. Configure a variável NEWS_API_KEY no arquivo .env")
+        raise ValueError(
+            "Chave de API não encontrada. Configure a variável NEWS_API_KEY no arquivo .env"
+        )
 
     directories = setup_all_directories()
     raw_data_dir = directories["raw_data_dir"]
@@ -36,8 +41,8 @@ if __name__ == "__main__":
         if end_date > now:
             end_date = now
 
-        from_date_str = start_date.strftime('%Y-%m-%d')
-        to_date_str = end_date.strftime('%Y-%m-%d')
+        from_date_str = start_date.strftime("%Y-%m-%d")
+        to_date_str = end_date.strftime("%Y-%m-%d")
 
         articles = fetch_news_window(api_key, query, from_date_str, to_date_str)
         all_articles.extend(articles)
@@ -47,9 +52,13 @@ if __name__ == "__main__":
     logger.info(f"Total bruto de {len(all_articles)} notícias extraídas")
 
     unique_articles = deduplicate_articles(all_articles)
+    with open(
+        "docker/dags/data/mock_data/mock_news_data.json", "w", encoding="utf-8"
+    ) as f:
+        json.dump(unique_articles, f, ensure_ascii=False, indent=4)
     logger.info(f"Total de {len(unique_articles)} notícias após deduplicação")
 
-    with open(raw_news_path, 'w', encoding='utf-8') as f:
+    with open(raw_news_path, "w", encoding="utf-8") as f:
         json.dump(unique_articles, f, ensure_ascii=False, indent=4)
 
     logger.info(f"Dados brutos salvos em: {raw_news_path}")

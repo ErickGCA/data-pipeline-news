@@ -1,57 +1,55 @@
 
-# 📰 News ETL Pipeline
+# News ETL Pipeline
 
-Este projeto tem como objetivo construir um pipeline ETL (Extract, Transform, Load) para processar notícias relacionadas a acidentes de carro com álcool e armazená-las na AWS S3.
+This project aims to build an ETL (Extract, Transform, Load) pipeline to process news related to car accidents involving the use of alcoholic beverages.
 
 ---
 
-## 📂 Estrutura do Projeto
+## Project Structure
 
-- `scripts/`
-  - Scripts para execução **local** do pipeline (sem Airflow).
-  - Contém a lógica de **extração**, **transformação** e **upload** para o S3.
-  - Pode ser orquestrado diretamente pelo `main_etl.py`.
-  
 - `docker/`
-  - Contém arquivos de configuração para subir ambiente com **Docker Compose**.
-  - Sobe containers para:
-    - **PostgreSQL** (banco de dados).
-    - **Apache Airflow** (orquestração dos pipelines).
-  - Subpastas:
-    - `dags/`: DAGs utilizadas no Airflow, com scripts de ETL adaptados.
-    - `logs/`: Diretório para armazenar logs do Airflow.
-    - `plugins/`: Plugins customizados para o Airflow (não utilizados no momento).
+  - Contains configuration files to set up the environment with **Docker Compose**.
+  - Spins up containers for:
+    - **PostgreSQL** (database).
+    - **Apache Airflow** (pipeline orchestration).
   
-- `data/`
-  - Armazena dados locais extraídos, transformados ou de testes.
+  - Subfolders:
+    - `data/raw`
+      - Stores locally extracted data that has not been processed yet.
+    - `data/processed`
+      - Stores locally transformed data.
+    - `dags/pipelines`: DAGs used in Airflow with adapted ETL scripts.
+    - `utils`: Modular extraction and deduplication scripts.
+    - `logs/`: Directory for Airflow logs.
+    - `plugins/`: Custom Airflow plugins (not in use currently).
 
 - `scripts_s3_functions/`
-  - Scripts auxiliares para trabalhar com visualização, extraçaõ e download no S3 (em desenvolvimento).
+  - Auxiliary scripts to work with visualization, extraction, and downloading from S3 (in development).
 
 - `docker-compose.yml`
-  - Arquivo principal para subir todos os containers necessários.
+  - The main file to bring up all required containers.
 
 - `requirements.txt`
-  - Lista de dependências Python necessárias para rodar o projeto localmente.
+  - List of Python dependencies needed to run the project locally.
 
 ---
 
-## 🚀 Como Executar
+## How to Run
 
-### Ambiente Local
+### Local Environment
 
-1. Clone o repositório:
+1. Clone the repository:
    ```bash
-   git clone https://github.com/seu-usuario/pipelines-news.git
+   git clone https://github.com/ErickGCA/data-pipeline-news.git
    cd pipelines-news
    ```
 
-2. Instale as dependências:
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Configure seu arquivo `.env`:
+3. Configure your `.env` file:
    ```ini
    AWS_ACCESS_KEY_ID=...
    AWS_SECRET_ACCESS_KEY=...
@@ -65,35 +63,34 @@ Este projeto tem como objetivo construir um pipeline ETL (Extract, Transform, Lo
    POSTGRES_DB=...
    ```
 
-4. Execute o ETL manualmente:
+4. Run the ETL manually:
    ```bash
-   python scripts/main_etl.py
+   python docker/dags/pipelines/main_etl.py
    ```
 
 ---
 
-### Ambiente com Docker e Airflow
+### Environment with Docker and Airflow
 
-1. Abra o docker, suba os containers:
+1. Open Docker, bring up the containers:
    ```bash
    cd docker
    docker compose up -d
    ```
 
-2. Acesse o Airflow via navegador:
+2. Access Airflow via browser:
 
    [http://localhost:8080](http://localhost:8080)
 
-3. No Airflow:
-   - Ative a DAG `etl_pipeline_diario`.
-   - Execute o pipeline pela interface.
+3. In Airflow for manual activation:
+   - Enable the `etl_pipeline_diario` DAG.
+   - Run the pipeline through the interface.
 
 ---
 
-## 📌 Observações
+## Notes
 
-- Garanta que as credenciais AWS estejam corretas para evitar erros no upload para o S3.
-- Garanta que as demais API_KEYS estejam corretas.
-- Garanta que as credencias do POSTGRES estejam corretas.
-- Garante que o docker esteja aberto e as dependencias estejam instaladas.
-
+- Ensure that the AWS credentials are correct to avoid errors when uploading to S3.
+- Make sure other API_KEYS are correct.
+- Ensure PostgreSQL credentials are correct.
+- Ensure Docker is running and that `requirements.txt` is installed.

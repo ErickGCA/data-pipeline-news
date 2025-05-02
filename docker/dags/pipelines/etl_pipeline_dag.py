@@ -6,7 +6,7 @@ import os
 import sys
 from datetime import datetime, timedelta
 
-from utils.load_to_postgres import load_to_postgres
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from dotenv import load_dotenv
@@ -15,6 +15,7 @@ from pipelines.upload_to_s3 import upload_to_s3
 from utils.deduplication import deduplicate_articles
 from utils.news_fetcher import fetch_news_window
 from utils.setup_all_directories import setup_all_directories
+from utils.load_to_postgres import load_to_postgres
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -169,7 +170,7 @@ with DAG(
     load_to_pg = PythonOperator(
     task_id="load_to_postgres",
     python_callable=load_to_postgres,
-    op_args=[processed_news_path],
+    op_args=[processed_news_path, raw_news_path],
     )
 
 

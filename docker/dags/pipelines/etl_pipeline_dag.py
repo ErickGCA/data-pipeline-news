@@ -1,9 +1,12 @@
+#etl_pipeline_dag.py
+
 import json
 import logging
 import os
 import sys
 from datetime import datetime, timedelta
 
+from utils.load_to_postgres import load_to_postgres
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from dotenv import load_dotenv
@@ -162,5 +165,11 @@ with DAG(
         python_callable=upload_with_timestamp,
         op_kwargs={"bucket_name": os.getenv("S3_BUCKET_NAME")},
     )
+    
+    load_to_pg = PythonOperator(
+    task_id="load_to_postgres",
+    python_callable=load_to_postgres,
+    op_args=[processed_news_path],
+    )
 
-    setup_dirs >> extract_news_task >> transform_news_task >> upload_news
+

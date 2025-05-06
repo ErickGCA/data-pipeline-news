@@ -10,18 +10,19 @@ from utils.setup_all_directories import setup_all_directories
 from utils.news_fetcher import fetch_news_window
 from utils.deduplication import deduplicate_articles
 from utils.gnews_fetcher import fetch_gnews
-from utils.bing_fetcher import fetch_bing
+#from utils.bing_fetcher import fetch_bing
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
-    
+
     load_dotenv()
+    """
     bing_endpoint = os.getenv("BING_ENDPOINT")
     if not bing_endpoint:
         raise ValueError("Configure a variável BING_ENDPOINT no .env")
-    
+    """
     
     api_key = os.getenv("NEWS_API_KEY")
     if not api_key:
@@ -29,12 +30,15 @@ if __name__ == "__main__":
     
     gnews_api_key = os.getenv("GNEWS_API_KEY")
     if not gnews_api_key:
+        print(gnews_api_key)
         raise ValueError("Chave de API não encontrada. Configure a variável GNEWS_API_KEY no arquivo .env")
-    
+    """
     bing_api_key = os.getenv("BING_API_KEY")
     if not bing_api_key:
         raise ValueError("Chave de API não encontrada. Configure a variável BING_API_KEY no arquivo .env")
-
+    """
+    
+    
     directories = setup_all_directories()
     raw_data_dir = directories["raw_data_dir"]
     raw_news_path = os.path.join(raw_data_dir, "raw_news.json")
@@ -62,11 +66,12 @@ if __name__ == "__main__":
 
         gnews_articles = fetch_gnews(gnews_api_key, query, from_date_str, to_date_str)
         all_articles.extend(gnews_articles)
-        
+        start_date = end_date
+        """
         bing_articles = fetch_bing(bing_api_key, bing_endpoint, query, from_date_str, to_date_str)
         all_articles.extend(bing_articles)
         start_date = end_date
-
+        """
     logger.info(f"Total bruto de {len(all_articles)} notícias extraídas")
 
     unique_articles = deduplicate_articles(all_articles)

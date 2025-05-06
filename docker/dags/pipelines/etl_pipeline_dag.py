@@ -10,9 +10,11 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from dotenv import load_dotenv
+
 from pipelines.transform_news import transform
 from pipelines.upload_to_s3 import upload_to_s3
 from pipelines.load_to_postgres import load_to_postgres
+
 from utils.deduplication import deduplicate_articles
 from utils.news_fetcher import fetch_news_window
 from utils.setup_all_directories import setup_all_directories

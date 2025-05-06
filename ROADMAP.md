@@ -26,22 +26,22 @@
 ---
 
 ## 🧪 Etapa 4: Validação e Qualidade dos Dados
-- [ ] Adicionar validações nos dados:
+- [x] Adicionar validações nos dados:
   - Conferir se as colunas esperadas estão presentes.
   - Tratar valores nulos ou inconsistências.
-- [ ] Criar logs ou relatórios simples de erros detectados.
-- [ ] Adicionar novas API's de noticias.
+- [x] Criar logs ou relatórios simples de erros detectados.
+- [x] Adicionar novas API's de noticias.
 
 ---
 
 ## 🧊 Etapa 5: Armazenamento Estruturado
 - [ ] Integrar o pipeline com Amazon Redshift, Athena ou Snowflake.
-- [ ] Criar tabelas e schemas apropriados para consultas SQL.
+- [x] Criar tabelas e schemas apropriados para consultas SQL.
 
 ---
 
 ## 📊 Etapa 6: Visualização
-- [ ] Conectar os dados no S3 ou banco de dados no Metabase, Superset ou Power BI.
+- [x] Conectar os dados no S3 ou banco de dados no Metabase, Superset ou Power BI.
 - [ ] Criar dashboards de análise:
   - Número de acidentes por estado.
   - Número de acidentes por data.

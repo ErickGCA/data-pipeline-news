@@ -1,4 +1,3 @@
-
 #extract_news.py
 
 import os
@@ -10,6 +9,7 @@ from utils.setup_all_directories import setup_all_directories
 from utils.news_fetcher import fetch_news_window
 from utils.deduplication import deduplicate_articles
 from utils.gnews_fetcher import fetch_gnews
+from utils.newsdata_fetcher import fetch_newsdata
 #from utils.bing_fetcher import fetch_bing
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -32,6 +32,10 @@ if __name__ == "__main__":
     if not gnews_api_key:
         print(gnews_api_key)
         raise ValueError("Chave de API não encontrada. Configure a variável GNEWS_API_KEY no arquivo .env")
+
+    newsdata_api_key = os.getenv("NEWSDATA_API_KEY")
+    if not newsdata_api_key:
+        raise ValueError("Chave de API não encontrada. Configure a variável NEWSDATA_API_KEY no arquivo .env")
     """
     bing_api_key = os.getenv("BING_API_KEY")
     if not bing_api_key:
@@ -66,6 +70,10 @@ if __name__ == "__main__":
 
         gnews_articles = fetch_gnews(gnews_api_key, query, from_date_str, to_date_str)
         all_articles.extend(gnews_articles)
+
+        newsdata_articles = fetch_newsdata(newsdata_api_key, query, from_date_str, to_date_str)
+        all_articles.extend(newsdata_articles)
+
         start_date = end_date
         """
         bing_articles = fetch_bing(bing_api_key, bing_endpoint, query, from_date_str, to_date_str)

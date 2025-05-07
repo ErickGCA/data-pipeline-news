@@ -46,12 +46,20 @@ if __name__ == "__main__":
     directories = setup_all_directories()
     raw_data_dir = directories["raw_data_dir"]
     raw_news_path = os.path.join(raw_data_dir, "raw_news.json")
+    
+    # Criando diretório para notícias não deduplicadas
+    non_dedup_dir = os.path.join(raw_data_dir, "non_dedup")
+    os.makedirs(non_dedup_dir, exist_ok=True)
+    
+    # Nome do arquivo com timestamp para manter histórico
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    non_dedup_path = os.path.join(non_dedup_dir, f"raw_news_{timestamp}.json")
 
     query = '(acidente OR colisão OR batida OR capotamento OR atropelamento) AND (álcool OR alcoolizado OR embriaguez OR bêbado OR alcoolemia OR "lei seca")'
     logger.info(f"Iniciando extração de notícias com a consulta: {query}")
 
     now = datetime.datetime.now()
-    days_back = 2
+    days_back = 10
     delta = datetime.timedelta(days=2)
 
     all_articles = []
@@ -81,6 +89,11 @@ if __name__ == "__main__":
         start_date = end_date
         """
     logger.info(f"Total bruto de {len(all_articles)} notícias extraídas")
+
+    # Salvando notícias antes da deduplicação
+    with open(non_dedup_path, 'w', encoding='utf-8') as f:
+        json.dump(all_articles, f, ensure_ascii=False, indent=4)
+    logger.info(f"Notícias brutas (não deduplicadas) salvas em: {non_dedup_path}")
 
     unique_articles = deduplicate_articles(all_articles)
 

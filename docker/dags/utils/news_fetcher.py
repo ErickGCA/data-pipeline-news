@@ -6,7 +6,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 
-def fetch_news_window(api_key, query, from_date, to_date, language="pt", page_size=10):
+def fetch_news_window(api_key, query, from_date, to_date, language="pt", page_size=50):
     
     logger.info(f"Buscando notícias da NewsAPI de {from_date} até {to_date}...")
 

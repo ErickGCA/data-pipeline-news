@@ -29,16 +29,12 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pipeli
 
 directories = setup_all_directories()
 raw_data_dir = directories["raw_data_dir"]
+processed_data_dir = directories["processed_data_dir"]
+mock_data_dir = directories["mock_data_dir"]
+
 raw_news_path = os.path.join(raw_data_dir, "raw_news.json")
-processed_news_path = os.path.join(
-    directories["processed_data_dir"], "processed_news.json"
-)
-mock_data_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "data",
-    "mock_data",
-    "mock_news_data.json",
-)
+processed_news_path = os.path.join(processed_data_dir, "processed_news.json")
+mock_data_path = os.path.join(mock_data_dir, "mock_news_data.json")
 
 load_dotenv()
 
@@ -88,7 +84,6 @@ def extract_news_with_windows_and_fallback(**kwargs):
         with open(raw_news_path, "w", encoding="utf-8") as f:
             json.dump(unique_articles, f, ensure_ascii=False, indent=4)
 
-        os.makedirs(os.path.dirname(mock_data_path), exist_ok=True)
         with open(mock_data_path, "w", encoding="utf-8") as f:
             json.dump(unique_articles, f, ensure_ascii=False, indent=4)
 
@@ -171,9 +166,12 @@ with DAG(
     )
     
     load_to_pg = PythonOperator(
-    task_id="load_to_postgres",
-    python_callable=load_to_postgres,
-    op_args=[processed_news_path, raw_news_path],
+        task_id="load_to_postgres",
+        python_callable=load_to_postgres,
+        op_args=[processed_news_path, raw_news_path],
     )
+
+    # Definindo a ordem de execução das tasks
+    setup_dirs >> extract_news_task >> transform_news_task >> upload_news >> load_to_pg
 
 

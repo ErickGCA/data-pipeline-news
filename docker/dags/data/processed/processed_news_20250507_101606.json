@@ -1,11 +1,26 @@
 [
     {
+        "source": {
+            "id": null,
+            "name": "Observador.pt"
+        },
+        "author": "Agência Lusa",
+        "title": "PSP deteve 842 condutores em abril",
+        "description": "A PSP registou 4.417 acidentes em abril, que provocaram 3 mortes, causadas por dois despistes em Lisboa e um atropelamento na Guarda. Nos acidentes, contabilizam-se 1.388 feridos, sendo 58 graves.",
+        "url": "https://observador.pt/2025/05/06/psp-deteve-842-condutores-em-abril-mais-262-do-que-no-ano-passado/",
+        "urlToImage": "https://wm.observador.pt/wm/l/https%3A%2F%2Fbordalo.observador.pt%2Fv2%2Frs%3Afill%3A770%3A403%2Fc%3A2000%3A1124%3Anowe%3A0%3A104%2Fq%3A70%2Ff%3Awebp%2Fplain%2Fhttps%3A%2F%2Fs3.observador.pt%2Fwp-content%2Fuploads%2F2024%2F11%2F16130813%2F42594139.jpg?layer=obstop:T",
+        "publishedAt": "2025-05-06T10:37:56Z",
+        "content": "A PSP deteve 842 condutores em abril, mais 262 do que no ano passado, destacando que a maioria das detenções são por condução em estado de embriaguez e 368 por condução sem carta, indicou esta terça-… [+3069 chars]",
+        "_source": "newsapi"
+    },
+    {
         "title": "Um dos 5 atletas atropelados por motorista bêbado teve morte cerebral",
         "description": "O condutor, identificado como Aleff Jardeu Oliveira Valente, 29 anos, foi preso em flagrante após o acidente que deixou outras quatro vítima",
         "content": "Um dos cinco atletas atropelados por um motorista alcoolizado durante a Corrida Nacional do Sesi, realizada na região do Complexo da Ponta Negra, em Manaus (AM), no Dia do Trabalhador, nesta quinta-feira (1º/5), teve morte cerebral. O corredor Emanue... [959 chars]",
         "url": "https://www.metropoles.com/distrito-federal/na-mira/um-dos-5-atletas-atropelados-por-motorista-bebado-teve-morte-cerebral",
         "source": "Metrópoles",
-        "publishedAt": "2025-05-02T17:25:00Z"
+        "publishedAt": "2025-05-02T17:25:00Z",
+        "_source": "gnews"
     },
     {
         "title": "Motorista que atropelou e matou 2 na Avenida Brasil estava bêbado",
@@ -13,7 +28,8 @@
         "content": "O motorista que atropelou e matou duas pessoas na madrugada desta sexta-feira (2/5), na Avenida Brasil, no Rio, foi preso. Segundo a Polícia Civil, o homem identificado como Anderson de Moraes estava em “elevado grau de embriaguez“, representado por ... [1056 chars]",
         "url": "https://www.metropoles.com/brasil/motorista-que-atropelou-e-matou-duas-pessoas-na-avenida-brasil-e-preso",
         "source": "Metrópoles",
-        "publishedAt": "2025-05-02T14:03:00Z"
+        "publishedAt": "2025-05-02T14:03:00Z",
+        "_source": "gnews"
     },
     {
         "title": "Homem de 70 anos atropelado e morto por Audi no ABC",
@@ -21,7 +37,8 @@
         "content": "São Paulo\nUm homem de 70 anos foi atropelado e morto por um veículo de luxo na manhã desta quarta-feira (30) em Santo André, na Grande São Paulo, segundo o Corpo de Bombeiros.\nO motorista, que não teve a identidade divulgada, dirigia um Audi TT, por ... [1209 chars]",
         "url": "https://www1.folha.uol.com.br/cotidiano/2025/04/homem-de-70-anos-e-atropelado-e-morto-por-carro-de-luxo-em-santo-andre-sp.shtml",
         "source": "Folha de S.Paulo",
-        "publishedAt": "2025-04-30T12:44:00Z"
+        "publishedAt": "2025-04-30T12:44:00Z",
+        "_source": "gnews"
     },
     {
         "title": "Médico suspeito de dirigir Mercedes envolvida em acidente com morte na BR-116 estava com habilitação suspensa",
@@ -29,7 +46,8 @@
         "content": "Colisão entre Mercedes e motocicleta deixou uma pessoa morta. Gabriela Plentz / Agencia RBS\nO médico Dênis Pereira da Cruz, 48 anos, investigado pelo acidente que resultou na morte da motociclista Karine Friedrich, 43 anos, na BR-116, em Estância Vel... [2547 chars]",
         "url": "https://gauchazh.clicrbs.com.br/transito/noticia/2025/04/medico-suspeito-de-dirigir-mercedes-envolvida-em-acidente-com-morte-na-br-116-estava-com-habilitacao-suspensa-cm9swdh0r005b014d1yynd1gj.html",
         "source": "Zero Hora",
-        "publishedAt": "2025-04-22T19:31:26Z"
+        "publishedAt": "2025-04-22T19:31:26Z",
+        "_source": "gnews"
     },
     {
         "title": "Carro pega fogo após bater em árvore na Avenida Oscar Pereira, em Porto Alegre",
@@ -37,7 +55,8 @@
         "content": "Saveiro branca ocupa parte da faixa da Avenida Professor Oscar Pereira, no sentido bairro-Centro. Guilherme Milman / Agencia RBS\nUm acidente próximo à Rua Santuário causa lentidão no sentido bairro-Centro da Avenida Professor Oscar Pereira, na zona s... [628 chars]",
         "url": "https://gauchazh.clicrbs.com.br/porto-alegre/noticia/2025/04/carro-pega-fogo-apos-bater-em-arvore-na-avenida-oscar-pereira-em-porto-alegre-cm9l97zvx01po014pniohkbg2.html",
         "source": "Zero Hora",
-        "publishedAt": "2025-04-17T11:05:40Z"
+        "publishedAt": "2025-04-17T11:05:40Z",
+        "_source": "gnews"
     },
     {
         "title": "Motorista tenta fugir de blitz da Lei Seca de ré e carro tomba no ES",
@@ -45,7 +64,8 @@
         "content": "Cinco pessoas foram presas durante uma operação integrada de blitz da Lei Seca no Espírito Santo. A ação aconteceu em nove cidades. Na Capital, Vitória, um dos motoristas presos tentou fugir de ré e avançar semáforo vermelho.\nO acidente aconteceu pró... [1408 chars]",
         "url": "https://www.folhavitoria.com.br/transito/motorista-tenta-fugir-de-blitz-da-lei-seca-de-re-e-carro-tomba-em-vitoria/",
         "source": "Jornal Folha Vitória",
-        "publishedAt": "2025-03-31T11:43:24Z"
+        "publishedAt": "2025-03-31T11:43:24Z",
+        "_source": "gnews"
     },
     {
         "title": "Motorista alcoolizado e passageiro ficam feridos em colisão na BR-153, em Cachoeira do Sul",
@@ -53,7 +73,8 @@
         "content": "Duas pessoas ficaram gravemente feridas em um acidente no início da manhã deste domingo (30) na BR-153, em Cachoeira do Sul, no centro do Estado. Conforme a Polícia Rodoviária Federal (PRF), as vítimas são o motorista e o passageiro de um Fusca que c... [414 chars]",
         "url": "https://gauchazh.clicrbs.com.br/transito/noticia/2025/03/motorista-alcoolizado-e-passageiro-ficam-feridos-em-colisao-na-br-153-em-cachoeira-do-sul-cm8vubvbb00tx013cbwofcwm7.html",
         "source": "Zero Hora",
-        "publishedAt": "2025-03-30T16:33:05Z"
+        "publishedAt": "2025-03-30T16:33:05Z",
+        "_source": "gnews"
     },
     {
         "title": "Perseguição policial em Paris deixa 13 feridos e carros empilhados",
@@ -61,7 +82,8 @@
         "content": "Entre os 13 feridos, dez são policiais, segundo afirmou o porta-voz do Sindicato de Polícia UN1TÉ, Reda Belhaj, no X. Os outros três seriam o motorista do carro e dois passageiros, segundo o France Bleu. As vítimas ficaram levemente feridas e os ocup... [566 chars]",
         "url": "https://noticias.uol.com.br/internacional/ultimas-noticias/2025/03/24/acidente-perseguicao-paris.htm",
         "source": "UOL",
-        "publishedAt": "2025-03-24T15:07:43Z"
+        "publishedAt": "2025-03-24T15:07:43Z",
+        "_source": "gnews"
     },
     {
         "title": "Professora universitária, escritora e poetisa: quem é Aimée Bolanõs, vítima de atropelamento em Rio Grande",
@@ -69,7 +91,8 @@
         "content": "Cubana, Aimée Bolanõs chegou a Rio Grande em 1997, onde construiu carreira como professora universitária na área de literatura. Furg / Divulgação\nA comunidade literária de Rio Grande, no sul do Estado, está em luto. Um acidente de trânsito abreviou n... [2755 chars]",
         "url": "https://gauchazh.clicrbs.com.br/transito/noticia/2025/03/professora-universitaria-escritora-e-poetisa-quem-e-aimee-bolanos-vitima-de-atropelamento-em-rio-grande-cm8m37yx600fa0144192j9cjj.html",
         "source": "Zero Hora",
-        "publishedAt": "2025-03-23T20:25:50Z"
+        "publishedAt": "2025-03-23T20:25:50Z",
+        "_source": "gnews"
     },
     {
         "title": "Mãe e filha de 11 anos morrem em acidente de trânsito na BR-386, em Sarandi",
@@ -77,6 +100,7 @@
         "content": "Uma colisão frontal envolvendo um veículo que transportava uma família e um carro guiado por um motorista embriagado acabou com a morte de mãe e filha na BR-386, em Sarandi, no norte do Estado. Uma das vítimas é uma menina de 11 anos, que morreu no l... [432 chars]",
         "url": "https://gauchazh.clicrbs.com.br/transito/noticia/2025/03/mae-e-filha-de-11-anos-morrem-em-acidente-de-transito-na-br-386-em-sarandi-cm8l1qkvv00cd0144n43654ec.html",
         "source": "Zero Hora",
-        "publishedAt": "2025-03-23T02:59:40Z"
+        "publishedAt": "2025-03-23T02:59:40Z",
+        "_source": "gnews"
     }
 ]

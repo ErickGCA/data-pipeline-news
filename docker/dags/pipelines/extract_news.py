@@ -10,6 +10,7 @@ from utils.news_fetcher import fetch_news_window
 from utils.deduplication import deduplicate_articles
 from utils.gnews_fetcher import fetch_gnews
 from utils.newsdata_fetcher import fetch_newsdata
+from utils.data_lake_config import DataLakeConfig
 #from utils.bing_fetcher import fetch_bing
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -42,24 +43,19 @@ if __name__ == "__main__":
         raise ValueError("Chave de API não encontrada. Configure a variável BING_API_KEY no arquivo .env")
     """
     
-    
+    # Configuração do Data Lake
     directories = setup_all_directories()
-    raw_data_dir = directories["raw_data_dir"]
-    raw_news_path = os.path.join(raw_data_dir, "raw_news.json")
+    data_lake = DataLakeConfig(directories["data_dir"])
     
-    # Criando diretório para notícias não deduplicadas
-    non_dedup_dir = os.path.join(raw_data_dir, "non_dedup")
-    os.makedirs(non_dedup_dir, exist_ok=True)
-    
-    # Nome do arquivo com timestamp para manter histórico
+    # Timestamp para os arquivos
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    non_dedup_path = os.path.join(non_dedup_dir, f"raw_news_{timestamp}.json")
+    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
     query = '(acidente OR colisão OR batida OR capotamento OR atropelamento) AND (álcool OR alcoolizado OR embriaguez OR bêbado OR alcoolemia OR "lei seca")'
     logger.info(f"Iniciando extração de notícias com a consulta: {query}")
 
     now = datetime.datetime.now()
-    days_back = 10
+    days_back = 2
     delta = datetime.timedelta(days=2)
 
     all_articles = []
@@ -73,38 +69,71 @@ if __name__ == "__main__":
         from_date_str = start_date.strftime('%Y-%m-%d')
         to_date_str = end_date.strftime('%Y-%m-%d')
 
-        articles = fetch_news_window(api_key, query, from_date_str, to_date_str)
-        all_articles.extend(articles)
-
+        # Coleta de notícias por fonte
+        newsapi_articles = fetch_news_window(api_key, query, from_date_str, to_date_str)
         gnews_articles = fetch_gnews(gnews_api_key, query, from_date_str, to_date_str)
-        all_articles.extend(gnews_articles)
-
         newsdata_articles = fetch_newsdata(newsdata_api_key, query, from_date_str, to_date_str)
+
+        # Adiciona metadados de fonte
+        for article in newsapi_articles:
+            article["_source"] = "newsapi"
+        for article in gnews_articles:
+            article["_source"] = "gnews"
+        for article in newsdata_articles:
+            article["_source"] = "newsdata"
+
+        all_articles.extend(newsapi_articles)
+        all_articles.extend(gnews_articles)
         all_articles.extend(newsdata_articles)
 
         start_date = end_date
-        """
-        bing_articles = fetch_bing(bing_api_key, bing_endpoint, query, from_date_str, to_date_str)
-        all_articles.extend(bing_articles)
-        start_date = end_date
-        """
+
     logger.info(f"Total bruto de {len(all_articles)} notícias extraídas")
 
-    # Salvando notícias antes da deduplicação
-    with open(non_dedup_path, 'w', encoding='utf-8') as f:
-        json.dump(all_articles, f, ensure_ascii=False, indent=4)
-    logger.info(f"Notícias brutas (não deduplicadas) salvas em: {non_dedup_path}")
+    # Salva notícias brutas com metadados
+    raw_metadata = {
+        "query": query,
+        "date_range": {
+            "start": from_date_str,
+            "end": to_date_str
+        },
+        "sources": {
+            "newsapi": len(newsapi_articles),
+            "gnews": len(gnews_articles),
+            "newsdata": len(newsdata_articles)
+        }
+    }
+    
+    raw_filename = f"raw_news_{timestamp}.json"
+    data_lake.save_with_metadata(
+        all_articles,
+        "raw",
+        raw_filename,
+        raw_metadata
+    )
 
+    # Deduplicação
     unique_articles = deduplicate_articles(all_articles)
+    
+    # Salva notícias processadas com metadados
+    processed_metadata = {
+        "original_file": raw_filename,
+        "deduplication_stats": {
+            "total_articles": len(all_articles),
+            "unique_articles": len(unique_articles),
+            "duplicate_ratio": 1 - (len(unique_articles) / len(all_articles))
+        }
+    }
+    
+    processed_filename = f"processed_news_{timestamp}.json"
+    data_lake.save_with_metadata(
+        unique_articles,
+        "processed",
+        processed_filename,
+        processed_metadata
+    )
 
-    mock_news_path = os.path.join(directories["mock_data_dir"], "mock_news_data.json")
-    with open(mock_news_path, "w", encoding="utf-8") as f:
-        json.dump(unique_articles, f, ensure_ascii=False, indent=4)
-    logger.info(f"Total de {len(unique_articles)} notícias após deduplicação (salvo mock)")
-
-    with open(raw_news_path, 'w', encoding='utf-8') as f:
-        json.dump(unique_articles, f, ensure_ascii=False, indent=4)
-    logger.info(f"Dados brutos salvos em: {raw_news_path}")
+    logger.info(f"Pipeline concluído. {len(unique_articles)} notícias únicas processadas.")
 
 
 

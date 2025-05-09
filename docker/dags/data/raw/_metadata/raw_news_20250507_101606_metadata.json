@@ -1,0 +1,16 @@
+{
+    "query": "(acidente OR colisão OR batida OR capotamento OR atropelamento) AND (álcool OR alcoolizado OR embriaguez OR bêbado OR alcoolemia OR \"lei seca\")",
+    "date_range": {
+        "start": "2025-05-05",
+        "end": "2025-05-07"
+    },
+    "sources": {
+        "newsapi": 1,
+        "gnews": 10,
+        "newsdata": 0
+    },
+    "created_at": "2025-05-07T10:16:12.418761",
+    "zone": "raw",
+    "format": "json",
+    "filename": "raw_news_20250507_101606.json"
+}

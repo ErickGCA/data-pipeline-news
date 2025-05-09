@@ -1,0 +1,61 @@
+site_name: News ETL Pipeline Documentation
+site_description: Documentação do pipeline ETL para extração e análise de notícias sobre acidentes com álcool
+repo_url: https://github.com/ErickGCA/data-pipeline-news
+site_author: Érick GCA
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
+  - admonition
+  - footnotes
+  - attr_list
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_submodules: true
+            docstring_style: google
+
+nav:
+  - Home: index.md
+  - Arquitetura:
+    - Visão Geral: architecture/overview.md
+    - Princípios SOLID: architecture/solid.md
+  - ETL:
+    - Extratores: etl/extractors.md
+    - Transformadores: etl/transformers.md
+    - Carregadores: etl/loaders.md
+  - Docker e Airflow:
+    - Configuração Docker: docker/setup.md
+    - DAGs Airflow: docker/dags.md
+  - Referência da API:
+    - Extratores: src/extractors.md
+    - Transformadores: src/transformers.md
+    - Carregadores: src/loaders.md
+    - Utilitários: src/utils.md 

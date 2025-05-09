@@ -11,34 +11,64 @@ services:
       - "5432:5432"
     volumes:
       - pg_airflow_data:/var/lib/postgresql/data
-
+      - ./services/postgres/init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
   airflow-webserver:
-    image: apache/airflow:2.6.1
+    build:
+      context: ./services/airflow
+      dockerfile: Dockerfile
     environment:
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__WEBSERVER__RBAC=True
+      - NEWS_API_KEY=${NEWS_API_KEY}
+      - GNEWS_API_KEY=${GNEWS_API_KEY}
+      - NEWSDATA_API_KEY=${NEWSDATA_API_KEY}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - S3_BUCKET=${S3_BUCKET}
+      - LOG_TO_FILE=True
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ../src:/opt/airflow/src
+      - ./data:/opt/airflow/data
     command: "airflow webserver"
 
   airflow-scheduler:
-    image: apache/airflow:2.6.1
+    build:
+      context: ./services/airflow
+      dockerfile: Dockerfile
     environment:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - NEWS_API_KEY=${NEWS_API_KEY}
+      - GNEWS_API_KEY=${GNEWS_API_KEY}
+      - NEWSDATA_API_KEY=${NEWSDATA_API_KEY}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - S3_BUCKET=${S3_BUCKET}
+      - LOG_TO_FILE=True
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ../src:/opt/airflow/src
+      - ./data:/opt/airflow/data
     command: "airflow scheduler"
 
 volumes:
-  pg_airflow_data:
+  pg_airflow_data: 

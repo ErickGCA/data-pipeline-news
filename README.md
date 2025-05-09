@@ -6,42 +6,58 @@ This project implements an ETL (Extract, Transform, Load) pipeline to process ne
 
 ## Project Structure
 
-The project now follows a SOLID architecture with clear separation of responsibilities:
+The project follows a SOLID architecture with clear separation of responsibilities:
 
-### Source Code (`src/`)
-- `etl/`: Core ETL components
-  - `extractors/`: Data extraction components
-    - `base_extractor.py`: Interface for all extractors
-    - `news_api_extractor.py`: NewsAPI implementation
-    - `gnews_extractor.py`: GNews API implementation
-  - `transformers/`: Data transformation components
-    - `base_transformer.py`: Interface for all transformers
-    - `news_transformer.py`: Implements filtering and relevance scoring
-  - `loaders/`: Data loading components
-    - `base_loader.py`: Interface for all loaders
-    - `postgres_loader.py`: Loads data to PostgreSQL
-    - `s3_uploader.py`: Uploads data to Amazon S3
-- `utils/`: Shared utilities
-  - `config.py`: Centralized configuration management
-  - `logger.py`: Standardized logging system
-  - `database.py`: Database connection handling
-
-### Infrastructure (`docker/`)
-- `services/`: Service-specific configurations
-  - `airflow/`: Airflow configuration
-    - `Dockerfile`: Custom Airflow image
-    - `requirements.txt`: Python dependencies
-  - `postgres/`: PostgreSQL configuration
-    - `init-scripts/`: Database initialization scripts
-- `dags/`: Airflow DAGs
-  - `pipelines/`: Pipeline definitions
-    - `news_etl_dag.py`: New SOLID-based DAG implementation
-    - `etl_pipeline_dag.py`: Legacy DAG (preserved for reference)
-- `data/`: Data storage
-  - `raw/`: Raw extracted data
-  - `processed/`: Transformed data
-- `logs/`: Airflow logs
-- `plugins/`: Airflow plugins
+```
+📁 pipelines-news/
+├── 📁 src/                           # Source code with SOLID architecture
+│   ├── 📁 etl/                       # Core ETL components
+│   │   ├── 📁 extractors/            # Data extraction components
+│   │   │   ├── 📄 base_extractor.py  # Interface for all extractors
+│   │   │   ├── 📄 news_api_extractor.py # NewsAPI implementation
+│   │   │   └── 📄 gnews_extractor.py # GNews API implementation
+│   │   │
+│   │   ├── 📁 transformers/          # Data transformation components
+│   │   │   ├── 📄 base_transformer.py # Interface for all transformers
+│   │   │   └── 📄 news_transformer.py # Filtering and relevance scoring
+│   │   │
+│   │   └── 📁 loaders/               # Data loading components
+│   │       ├── 📄 base_loader.py     # Interface for all loaders
+│   │       ├── 📄 postgres_loader.py # Loads data to PostgreSQL
+│   │       └── 📄 s3_uploader.py     # Uploads data to Amazon S3
+│   │
+│   └── 📁 utils/                     # Shared utilities
+│       ├── 📄 config.py              # Centralized configuration management
+│       ├── 📄 logger.py              # Standardized logging system
+│       └── 📄 database.py            # Database connection handling
+│
+├── 📁 docker/                        # Infrastructure configuration
+│   ├── 📁 services/                  # Service-specific configurations
+│   │   ├── 📁 airflow/               # Airflow configuration
+│   │   │   ├── 📄 Dockerfile         # Custom Airflow image
+│   │   │   └── 📄 requirements.txt   # Python dependencies
+│   │   │
+│   │   └── 📁 postgres/              # PostgreSQL configuration
+│   │       └── 📁 init-scripts/      # Database initialization scripts
+│   │           └── 📄 init-db.sql    # SQL setup script
+│   │
+│   ├── 📁 dags/                      # Airflow DAGs
+│   │   └── 📁 pipelines/             # Pipeline definitions
+│   │       ├── 📄 news_etl_dag.py    # New SOLID-based DAG implementation
+│   │       └── 📄 etl_pipeline_dag.py # Legacy DAG (preserved for reference)
+│   │
+│   ├── 📁 data/                      # Data storage
+│   │   ├── 📁 raw/                   # Raw extracted data
+│   │   └── 📁 processed/             # Transformed data
+│   │
+│   ├── 📁 logs/                      # Airflow logs
+│   ├── 📁 plugins/                   # Airflow plugins
+│   ├── 📄 docker-compose.yml         # Docker services configuration
+│   └── 📄 README.md                  # Docker setup documentation
+│
+├── 📄 README.md                      # Main project documentation
+└── 📄 requirements.txt               # Python dependencies for local development
+```
 
 > **Note**: The legacy structure has been preserved for backward compatibility while transitioning to the new architecture.
 

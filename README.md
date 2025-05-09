@@ -1,36 +1,49 @@
+# News ETL Pipeline with SOLID Architecture
 
-# News ETL Pipeline
-
-This project aims to build an ETL (Extract, Transform, Load) pipeline to process news related to car accidents involving the use of alcoholic beverages.
+This project implements an ETL (Extract, Transform, Load) pipeline to process news related to car accidents involving alcohol consumption, following SOLID principles for improved maintainability and extensibility.
 
 ---
 
 ## Project Structure
 
-- `docker/`
-  - Contains configuration files to set up the environment with **Docker Compose**.
-  - Spins up containers for:
-    - **PostgreSQL** (database).
-    - **Apache Airflow** (pipeline orchestration).
-  
-  - Subfolders:
-    - `data/raw`
-      - Stores locally extracted data that has not been processed yet.
-    - `data/processed`
-      - Stores locally transformed data.
-    - `dags/pipelines`: DAGs used in Airflow with adapted ETL scripts.
-    - `utils`: Modular extraction and deduplication scripts.
-    - `logs/`: Directory for Airflow logs.
-    - `plugins/`: Custom Airflow plugins (not in use currently).
+The project now follows a SOLID architecture with clear separation of responsibilities:
 
-- `scripts_s3_functions/`
-  - Auxiliary scripts to work with visualization, extraction, and downloading from S3 (in development).
+### Source Code (`src/`)
+- `etl/`: Core ETL components
+  - `extractors/`: Data extraction components
+    - `base_extractor.py`: Interface for all extractors
+    - `news_api_extractor.py`: NewsAPI implementation
+    - `gnews_extractor.py`: GNews API implementation
+  - `transformers/`: Data transformation components
+    - `base_transformer.py`: Interface for all transformers
+    - `news_transformer.py`: Implements filtering and relevance scoring
+  - `loaders/`: Data loading components
+    - `base_loader.py`: Interface for all loaders
+    - `postgres_loader.py`: Loads data to PostgreSQL
+    - `s3_uploader.py`: Uploads data to Amazon S3
+- `utils/`: Shared utilities
+  - `config.py`: Centralized configuration management
+  - `logger.py`: Standardized logging system
+  - `database.py`: Database connection handling
 
-- `docker-compose.yml`
-  - The main file to bring up all required containers.
+### Infrastructure (`docker/`)
+- `services/`: Service-specific configurations
+  - `airflow/`: Airflow configuration
+    - `Dockerfile`: Custom Airflow image
+    - `requirements.txt`: Python dependencies
+  - `postgres/`: PostgreSQL configuration
+    - `init-scripts/`: Database initialization scripts
+- `dags/`: Airflow DAGs
+  - `pipelines/`: Pipeline definitions
+    - `news_etl_dag.py`: New SOLID-based DAG implementation
+    - `etl_pipeline_dag.py`: Legacy DAG (preserved for reference)
+- `data/`: Data storage
+  - `raw/`: Raw extracted data
+  - `processed/`: Transformed data
+- `logs/`: Airflow logs
+- `plugins/`: Airflow plugins
 
-- `requirements.txt`
-  - List of Python dependencies needed to run the project locally.
+> **Note**: The legacy structure has been preserved for backward compatibility while transitioning to the new architecture.
 
 ---
 
@@ -51,48 +64,57 @@ This project aims to build an ETL (Extract, Transform, Load) pipeline to process
 
 3. Configure your `.env` file:
    ```ini
-   AWS_ACCESS_KEY_ID=...
-   AWS_SECRET_ACCESS_KEY=...
+   AWS_ACCESS_KEY=...
+   AWS_SECRET_KEY=...
    AWS_REGION=...
-   S3_BUCKET_NAME=...
+   S3_BUCKET=...
    NEWS_API_KEY=...
-   AIRFLOW__CORE__SQL__ALCHEMY__CONN=...
-   AIRFLOW__CORE__LOAD_EXAMPLES=...
+   GNEWS_API_KEY=...
+   NEWSDATA_API_KEY=...
    POSTGRES_USER=...
    POSTGRES_PASSWORD=...
    POSTGRES_DB=...
    POSTGRES_PORT=...
    POSTGRES_HOST=...
-   ```
-
-4. Run the ETL manually:
-   ```bash
-   python docker/dags/pipelines/main_etl.py
+   LOG_TO_FILE=True
    ```
 
 ---
 
 ### Environment with Docker and Airflow
 
-1. Open Docker, bring up the containers:
+1. Start Docker, then launch the containers:
    ```bash
    cd docker
-   docker compose up -d
+   docker-compose up -d
    ```
 
 2. Access Airflow via browser:
-
    [http://localhost:8080](http://localhost:8080)
 
-3. In Airflow for manual activation:
-   - Enable the `etl_pipeline_diario` DAG.
-   - Run the pipeline through the interface.
+3. In Airflow:
+   - Find the `news_etl_pipeline` DAG (new SOLID architecture)
+   - Enable and run the pipeline through the interface
+
+---
+
+## Architecture Benefits
+
+The new SOLID architecture provides several advantages:
+
+- **Single Responsibility**: Each component has one focused responsibility
+- **Open/Closed**: New extractors, transformers, or loaders can be added without modifying existing code
+- **Liskov Substitution**: Components are interchangeable as long as they follow the interfaces
+- **Interface Segregation**: Clean interfaces for each component type
+- **Dependency Inversion**: High-level modules depend on abstractions, not implementations
+
+This makes the codebase more maintainable, testable, and extensible.
 
 ---
 
 ## Notes
 
-- Ensure that the AWS credentials are correct to avoid errors when uploading to S3.
-- Make sure other API_KEYS are correct.
-- Ensure PostgreSQL credentials are correct.
-- Ensure Docker is running and that `requirements.txt` is installed.
+- Ensure that the AWS credentials are correct to avoid errors when uploading to S3
+- Make sure all API keys are correct
+- Ensure PostgreSQL credentials are correct
+- The project requires Docker with docker-compose for the full infrastructure

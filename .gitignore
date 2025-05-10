@@ -18,3 +18,9 @@ __pycache__/
 
 run_etl.py
 docker/dags/pipelines/backups
+
+upgrades.md
+
+old_pipeline/
+
+scripts_s3_functions/

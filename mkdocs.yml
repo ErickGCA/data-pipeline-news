@@ -6,7 +6,7 @@ site_author: Érick GCA
 theme:
   name: material
   palette:
-    primary: blue
+    primary: black
     accent: indigo
   features:
     - navigation.tabs

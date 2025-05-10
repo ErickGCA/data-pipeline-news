@@ -1,7 +1,0 @@
-README.md
-pyproject.toml
-news_etl_pipeline.egg-info/PKG-INFO
-news_etl_pipeline.egg-info/SOURCES.txt
-news_etl_pipeline.egg-info/dependency_links.txt
-news_etl_pipeline.egg-info/top_level.txt
-src/__init__.py

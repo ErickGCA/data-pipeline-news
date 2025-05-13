@@ -24,3 +24,6 @@ upgrades.md
 old_pipeline/
 
 scripts_s3_functions/
+
+# Python package metadata
+*.egg-info/

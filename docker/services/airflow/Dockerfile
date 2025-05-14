@@ -18,4 +18,5 @@ COPY requirements.txt /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
 # Criar diretórios para dados do pipeline
-RUN mkdir -p /opt/airflow/data/raw /opt/airflow/data/processed /opt/airflow/logs 
+RUN mkdir -p /opt/airflow/data/raw /opt/airflow/data/processed /opt/airflow/logs && \
+    chown -R airflow:root /opt/airflow/data /opt/airflow/logs

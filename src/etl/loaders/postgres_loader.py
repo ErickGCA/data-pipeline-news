@@ -44,7 +44,7 @@ class PostgresLoader(BaseLoader):
             return False
         
         table_name = kwargs.get("table_name", self.default_table_name)
-        if_exists = kwargs.get("if_exists", "replace")
+        if_exists = kwargs.get("if_exists", "append")
         index = kwargs.get("index", False)
         
         if not table_name:

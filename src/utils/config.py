@@ -29,8 +29,21 @@ class Config:
         self.raw_data_dir = self.data_dir / "raw"
         self.processed_data_dir = self.data_dir / "processed"
         
-        self.raw_data_dir.mkdir(parents=True, exist_ok=True)
-        self.processed_data_dir.mkdir(parents=True, exist_ok=True)
+        # Verificar se está rodando no Docker/Airflow
+        is_airflow = os.path.exists('/opt/airflow')
+        
+        # Criar diretórios apenas se não estiver rodando no Airflow
+        if not is_airflow:
+            try:
+                self.raw_data_dir.mkdir(parents=True, exist_ok=True)
+                self.processed_data_dir.mkdir(parents=True, exist_ok=True)
+            except Exception as e:
+                print(f"Aviso: Não foi possível criar diretórios de dados: {e}")
+        else:
+            # Se estiver no Airflow, use os diretórios predefinidos
+            self.data_dir = Path('/opt/airflow/data')
+            self.raw_data_dir = self.data_dir / "raw"
+            self.processed_data_dir = self.data_dir / "processed"
         
         self.news_api_key = os.getenv("NEWS_API_KEY")
         self.gnews_api_key = os.getenv("GNEWS_API_KEY")

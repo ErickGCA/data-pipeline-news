@@ -75,11 +75,52 @@ class Database:
             bool: True se bem-sucedido, False caso contrário
         """
         try:
-            df.to_sql(table_name, self.engine, if_exists=if_exists, index=index)
+            # Verificar se o esquema existe e criar se necessário
+            schema = table_name.split('.')[0] if '.' in table_name else None
+            table = table_name.split('.')[-1]
+            
+            if schema:
+                with self.engine.connect() as conn:
+                    conn.execute(text(f"CREATE SCHEMA IF NOT EXISTS {schema}"))
+                    conn.execute(text("COMMIT"))
+                    logger.info(f"Esquema {schema} verificado/criado")
+                
+                # Ajustar o nome da tabela para o formato sem o esquema
+                table_name_without_schema = table
+            else:
+                table_name_without_schema = table_name
+            
+            # Salvar o DataFrame
+            if schema:
+                df.to_sql(
+                    table_name_without_schema, 
+                    self.engine, 
+                    schema=schema,
+                    if_exists=if_exists, 
+                    index=index
+                )
+            else:
+                df.to_sql(
+                    table_name_without_schema, 
+                    self.engine, 
+                    if_exists=if_exists, 
+                    index=index
+                )
+            
+            # Garantir que a transação seja comitada
+            with self.engine.connect() as conn:
+                conn.execute(text("COMMIT"))
+                
             logger.info(f"DataFrame salvo na tabela {table_name} com {len(df)} registros")
             return True
         except Exception as e:
             logger.error(f"Erro ao salvar DataFrame na tabela {table_name}: {e}")
+            # Tentar fazer rollback em caso de erro
+            try:
+                with self.engine.connect() as conn:
+                    conn.execute(text("ROLLBACK"))
+            except:
+                pass
             return False
     
     def query_to_dataframe(self, query: str, params: Optional[dict] = None) -> pd.DataFrame:
